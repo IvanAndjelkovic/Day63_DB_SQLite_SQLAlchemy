@@ -1,0 +1,4 @@
+1.Create the virtual environment:Bashpython3 -m venv .venv
+2.Activate the environment:Bashsource .venv/bin/activate
+3.Install dependencies:Bashpip install --upgrade pip
+pip install -r requirements.txt
