@@ -18,13 +18,19 @@ app = Flask(__name__)
 all_books = []
 
 
+
+
 @app.route('/')
 def home():
     return render_template ("index.html")
 
 
-@app.route("/add")
+@app.route("/add", methods=["GET", "POST"])
 def add():
+
+    if request.method== "POST":
+        title=request.form.get("Book Name")
+        print(title)
     return render_template("add.html")
 
 
