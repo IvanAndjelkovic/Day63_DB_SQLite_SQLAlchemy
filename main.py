@@ -29,8 +29,9 @@ def home():
 def add():
 
     if request.method== "POST":
-        title=request.form.get("Book Name")
-        print(title)
+        dict=request.form.to_dict()
+        all_books.append(dict)
+        print(all_books)
     return render_template("add.html")
 
 
