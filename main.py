@@ -21,8 +21,8 @@ all_books = []
 
 
 @app.route('/')
-def home():
-    return render_template ("index.html")
+def home(books=all_books):
+    return render_template ("index.html", books=books)
 
 
 @app.route("/add", methods=["GET", "POST"])
@@ -31,8 +31,8 @@ def add():
     if request.method== "POST":
         dict=request.form.to_dict()
         all_books.append(dict)
-        print(all_books)
-    return render_template("add.html")
+        
+    return render_template("add.html", books=all_books)
 
 
 if __name__ == "__main__":
