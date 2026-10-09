@@ -43,9 +43,14 @@ class Books(db.Model):
     # Optional: this will allow each book object to be identified by its title when printed.
     def __repr__(self):
         return f'<Book {self.title}>'
+with app.app_context():
+    db.create_all()
 
 @app.route('/')
-def home(books=all_books):
+def home():
+    with app.app_context():
+        books=db.session.scalars(db.select(Books).order_by(Books.id)).all()
+    print(books)
     return render_template ("index.html", books=books)
 
 
@@ -53,10 +58,18 @@ def home(books=all_books):
 def add():
 
     if request.method== "POST":
-        dict=request.form.to_dict()
-        all_books.append(dict)
+        with app.app_context():
+            new_book = Books(
+                title=request.form["title"],
+                author=request.form["author"],
+                rating=request.form["rating"]
+            )
+            db.session.add(new_book)
+            db.session.commit()
+            all_books.append(new_book)
+            return redirect(url_for('home'))
         
-    return render_template("add.html", books=all_books)
+    return render_template("add.html")
 
 
 if __name__ == "__main__":
