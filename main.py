@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, abort, render_template, request, redirect, url_for
 import sqlite3
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -70,6 +70,19 @@ def add():
             return redirect(url_for('home'))
         
     return render_template("add.html")
+
+@app.route("/edit/<int:book_id>", methods=["GET", "POST"])
+def edit(book_id):
+    book = db.session.get(Books, book_id)
+    if book is None:
+        abort(404)
+
+    if request.method=="POST":
+        book.rating=float(request.form["rating"])
+        db.session.commit() 
+        return redirect(url_for('home'))
+
+    return render_template("edit.html",book=book)
 
 
 if __name__ == "__main__":
